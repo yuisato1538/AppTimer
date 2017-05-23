@@ -10,7 +10,7 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    var count: Double = 60.00
+    var count: Int = 10 * 60 // 10min = 600sec
     var timer = Timer()
     
     @IBOutlet var timeLabel: UILabel!
@@ -20,7 +20,7 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view, typically from a nib.
     
         if !timer.isValid {
-            timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(ViewController.up), userInfo: nil, repeats: true)
+            timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(ViewController.up), userInfo: nil, repeats: true)
             
         }
         
@@ -29,8 +29,12 @@ class ViewController: UIViewController {
     }
     
     func up() {
-        count = count - 0.1
-        timeLabel.text = String(format:"%d" , count)
+        count = count - 1
+        let minStr = String(count/60)
+        let secStr = String(count%60)
+        timeLabel.text = String(minStr + ":" + secStr)
+        //        count = count - 0.01
+//        timeLabel.text = String(format:"%f" , count)
     }
 
     override func didReceiveMemoryWarning() {

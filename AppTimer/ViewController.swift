@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDataSource {
     
     var count: Int = 10 * 60 // 10min = 600sec
     var timer = Timer()

@@ -10,33 +10,29 @@ import UIKit
 
 class ViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDataSource {
     
-    var count: Int = 10 * 60 // 10min = 600sec
-    var timer = Timer()
-    
-    @IBOutlet var timeLabel: UILabel!
+    @IBOutlet var timePickerView: UIPickerView!
 
+    let dataSelect = ["5","10","15"]
+    //列数を返す
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    //行数を返す
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return dataSelect.count
+    }
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return dataSelect[row]
+    }
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        timelabel.text="\(dataSelect[row])"
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
     
-        if !timer.isValid {
-            timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(ViewController.up), userInfo: nil, repeats: true)
-            
-        }
         
-        up()
-    
-    }
-    
-    func up() {
-        count = count - 1
-        let minStr = String(count/60)
-        let secStr = String(count%60)
-        timeLabel.text = String(minStr + ":" + secStr)
-        //        count = count - 0.01
-//        timeLabel.text = String(format:"%f" , count)
-    }
-
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.

@@ -11,7 +11,10 @@ import UIKit
 class ViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDataSource {
     
     @IBOutlet var timePickerView: UIPickerView!
-
+    
+    
+    var selected = "3"
+    
     let dataSelect = ["5","10","15"]
     //列数を返す
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
@@ -25,19 +28,40 @@ class ViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDataSour
         return dataSelect[row]
     }
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        timelabel.text="\(dataSelect[row])"
+        //        timelabel.text="\(dataSelect[row])"
+        
+        selected = dataSelect[row]
+        print(selected)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-    
         
+        timePickerView.delegate = self
+        timePickerView.dataSource = self
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
-
+//    func seegueToTimerViewController(){
+//        self.performSegue(withIdentifier: "toTimeVC", sender:nil)
+//    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "toTimeVC"{
+            let TimerViewController = segue.destination as! TimerViewController
+            TimerViewController.numstr = selected
+        }
+        
+    }
+    
+    @IBAction func startButton() {
+        self.performSegue(withIdentifier: "toTimeVC", sender:nil)
+    }
+    
+    
 }
 

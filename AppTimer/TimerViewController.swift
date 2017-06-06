@@ -12,19 +12,27 @@ class TimerViewController: UIViewController {
     var count: Int = 10 * 60 // 10min = 600sec
     var timer = Timer()
     
+    var numstr = "0"
+    
     @IBOutlet var timerLabel: UILabel!
 
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        print(numstr)
+        
+        count = Int(numstr)! * 60
+        
+        timerLabel.text = numstr + ":00"
 
         // Do any additional setup after loading the view.
         if !timer.isValid {
-            timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(ViewController.up), userInfo: nil, repeats: true)
+            timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.up), userInfo: nil, repeats: true)
             
         }
         
-        up()
+//        up()
         
     }
     
@@ -33,14 +41,16 @@ class TimerViewController: UIViewController {
         let minStr = String(count/60)
         let secStr = String(count%60)
         timerLabel.text = String(minStr + ":" + secStr)
-    }}
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
-
+    class TimerViewController: UIViewController{
+        var parameters: [String:String] = [:]
+    }
     /*
     // MARK: - Navigation
 
@@ -50,5 +60,4 @@ class TimerViewController: UIViewController {
         // Pass the selected object to the new view controller.
     }
     */
-
 }

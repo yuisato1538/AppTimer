@@ -53,7 +53,7 @@
                                     <color key="titleColor" red="0.64364328414170235" green="0.8327684476073266" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                                 <connections>
-                                    <segue destination="PP7-hs-kGX" kind="presentation" id="ZUT-WT-oS2"/>
+                                    <action selector="startButton" destination="BYZ-38-t0r" eventType="touchUpInside" id="l0v-sl-zK8"/>
                                 </connections>
                             </button>
                             <pickerView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4XV-hT-BUm">
@@ -72,6 +72,7 @@
                     </view>
                     <connections>
                         <outlet property="timePickerView" destination="4XV-hT-BUm" id="uRg-xj-Y7Q"/>
+                        <segue destination="PP7-hs-kGX" kind="showDetail" identifier="toTimeVC" id="AKq-Ng-eko"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

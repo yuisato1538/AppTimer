@@ -7,12 +7,13 @@
 //
 
 import UIKit
+import UserNotifications
 
 class TimerViewController: UIViewController {
     var count: Int = 10 * 60 // 10min = 600sec
     var timer = Timer()
     
-    var numstr = "0"
+    var numstr: String!
     var appstr = "Instagram"
     
     @IBOutlet var timerLabel: UILabel!
@@ -20,6 +21,36 @@ class TimerViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let finish = UNNotificationAction(identifier:"finish",
+                                          title: "終わる",
+                                          options: [])
+        let add = UNNotificationAction(identifier: "add_5",
+                                       title: "5分追加",
+                                       options: [])
+        let category = UNNotificationCategory(identifier: "message",
+                                              actions: [finish, add],
+                                              intentIdentifiers: [],
+                                              options: [])
+        UNUserNotificationCenter.current().setNotificationCategories([category])
+        
+        let content = UNMutableNotificationContent()
+        content.title = "タイマー終了"
+        content.body = "アプリの使用を終わりますか？"
+        content.sound = UNNotificationSound.default()
+        
+        // categoryIdentifierを設定
+        content.categoryIdentifier = "message"
+        
+        // 5秒後
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
+        let request = UNNotificationRequest(identifier: "FiveSecond",
+                                            content: content,
+                                            trigger: trigger)
+        
+        UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
+        
+        
         
         print(numstr)
         
@@ -38,6 +69,24 @@ class TimerViewController: UIViewController {
         
     }
     
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                didReceive response: UNNotificationResponse,
+                                withCompletionHandler completionHandler: () -> Void) {
+        
+        switch response.actionIdentifier {
+        case ActionIdentifier.finish.rawValue:
+            debugPrint("終わる")
+        case ActionIdentifier.add.rawValue:
+            debugPrint("5分追加")
+        default:
+            ()
+        }
+        
+        completionHandler()
+    }
+    
+
+    
     func up() {
         count = count - 1
         let minStr = String(count/60)
@@ -50,9 +99,9 @@ class TimerViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    class TimerViewController: UIViewController{
-        var parameters: [String:String] = [:]
-    }
+    
+    
+    
     /*
     // MARK: - Navigation
 
@@ -62,4 +111,9 @@ class TimerViewController: UIViewController {
         // Pass the selected object to the new view controller.
     }
     */
+}
+
+enum ActionIdentifier: String {
+    case finish
+    case add
 }

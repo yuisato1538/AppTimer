@@ -14,10 +14,10 @@ class ViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDataSour
     @IBOutlet var appPickerView: UIPickerView!
     
     
-    var selected = "5"
+    var selected = "1"
     var selectedApp = "Instagram"
     
-    let dataSelect = ["5","10","15","20","25","30"]
+    let dataSelect = ["1","5","10","15","20","25","30"]
     let appSelect = ["Instagram","Twitter"]
     
     override func viewDidLoad() {

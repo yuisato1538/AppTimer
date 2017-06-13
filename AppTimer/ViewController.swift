@@ -14,9 +14,11 @@ class ViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDataSour
     @IBOutlet var appPickerView: UIPickerView!
     
     
-    var selected = "3"
+    var selected = "5"
+    var selectedApp = "Instagram"
     
     let dataSelect = ["5","10","15","20","25","30"]
+    let appSelect = ["Instagram","Twitter"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,14 +37,15 @@ class ViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDataSour
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-//    func seegueToTimerViewController(){
-//        self.performSegue(withIdentifier: "toTimeVC", sender:nil)
-//    }
+    //    func seegueToTimerViewController(){
+    //        self.performSegue(withIdentifier: "toTimeVC", sender:nil)
+    //    }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toTimeVC"{
             let TimerViewController = segue.destination as! TimerViewController
             TimerViewController.numstr = selected
+            TimerViewController.appstr = selectedApp
         }
         
     }
@@ -59,28 +62,38 @@ class ViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDataSour
         } else if pickerView.tag == 2 {
             return 1
         }
-        return 0
+        return 0 // 呼ばれない
     }
     //行数を返す
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         if pickerView.tag == 1 {
             return dataSelect.count
         } else if pickerView.tag == 2 {
-            return dataSelect.count
+            return appSelect.count
         }
-        return dataSelect.count
+        return 0 // 呼ばれない
     }
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return dataSelect[row]
+        if pickerView.tag == 1{
+            return dataSelect[row]
+        }else if pickerView.tag == 2 {
+            return appSelect[row]
+        }else{
+            return ""
+        }
     }
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         //        timelabel.text="\(dataSelect[row])"
+        if pickerView.tag == 1{
+            selected = dataSelect[row]
+            print(selected)
+        }else{
+            selectedApp = appSelect[row]
+            print(selectedApp)
+        }
         
-        selected = dataSelect[row]
-        print(selected)
+        
+        
     }
     
-
-    
 }
-

@@ -13,9 +13,10 @@ class TimerViewController: UIViewController {
     var timer = Timer()
     
     var numstr = "0"
+    var appstr = "Instagram"
     
     @IBOutlet var timerLabel: UILabel!
-
+    @IBOutlet var useappLabel : UILabel!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,6 +26,7 @@ class TimerViewController: UIViewController {
         count = Int(numstr)! * 60
         
         timerLabel.text = numstr + ":00"
+        useappLabel.text = appstr
 
         // Do any additional setup after loading the view.
         if !timer.isValid {

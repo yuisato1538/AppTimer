@@ -9,6 +9,11 @@
 import UIKit
 import UserNotifications
 
+enum ActionIdentifier: String {
+    case attend
+    case absent
+}
+
 class TimerViewController: UIViewController {
     var count: Int = 10 * 60 // 10min = 600sec
     var timer = Timer()
@@ -21,7 +26,60 @@ class TimerViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+
         
+        
+        
+        print(numstr)
+        
+        
+        count = Int(numstr)! * 60
+        
+        count = 10 // デバッグ用
+        
+        timerLabel.text = numstr + ":00"
+        useappLabel.text = appstr
+
+        // Do any additional setup after loading the view.
+        if !timer.isValid {
+            timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.up), userInfo: nil, repeats: true)
+            
+        }
+        
+//        up()
+        
+    }
+    
+    @available(iOS 10.0, *)
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                didReceive response: UNNotificationResponse,
+                                withCompletionHandler completionHandler: @escaping () -> Swift.Void) {
+        
+        switch response.actionIdentifier {
+        case ActionIdentifier.attend.rawValue:
+            debugPrint("出席します")
+        case ActionIdentifier.absent.rawValue:
+            debugPrint("欠席します")
+        default:
+            ()
+        }
+        
+        completionHandler()
+    }
+    
+    func up() {
+        count = count - 1
+        let minStr = String(count/60)
+        let secStr = String(count%60)
+        timerLabel.text = String(minStr + ":" + secStr)
+        if count < 1{
+            TimerFinished()
+            timer.invalidate()
+        }
+    }
+    
+    func TimerFinished() {
         let finish = UNNotificationAction(identifier:"finish",
                                           title: "終わる",
                                           options: [])
@@ -42,57 +100,16 @@ class TimerViewController: UIViewController {
         // categoryIdentifierを設定
         content.categoryIdentifier = "message"
         
-        // 5秒後
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
+        // 1秒後
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 0.01, repeats: false)
         let request = UNNotificationRequest(identifier: "FiveSecond",
                                             content: content,
                                             trigger: trigger)
         
         UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
-        
-        
-        
-        print(numstr)
-        
-        count = Int(numstr)! * 60
-        
-        timerLabel.text = numstr + ":00"
-        useappLabel.text = appstr
-
-        // Do any additional setup after loading the view.
-        if !timer.isValid {
-            timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.up), userInfo: nil, repeats: true)
-            
-        }
-        
-//        up()
-        
     }
-    
-    func userNotificationCenter(_ center: UNUserNotificationCenter,
-                                didReceive response: UNNotificationResponse,
-                                withCompletionHandler completionHandler: () -> Void) {
-        
-        switch response.actionIdentifier {
-        case ActionIdentifier.finish.rawValue:
-            debugPrint("終わる")
-        case ActionIdentifier.add.rawValue:
-            debugPrint("5分追加")
-        default:
-            ()
-        }
-        
-        completionHandler()
-    }
-    
 
     
-    func up() {
-        count = count - 1
-        let minStr = String(count/60)
-        let secStr = String(count%60)
-        timerLabel.text = String(minStr + ":" + secStr)
-    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -111,9 +128,4 @@ class TimerViewController: UIViewController {
         // Pass the selected object to the new view controller.
     }
     */
-}
-
-enum ActionIdentifier: String {
-    case finish
-    case add
 }

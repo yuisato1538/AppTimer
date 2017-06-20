@@ -51,23 +51,6 @@ class TimerViewController: UIViewController {
         
     }
     
-    @available(iOS 10.0, *)
-    func userNotificationCenter(_ center: UNUserNotificationCenter,
-                                didReceive response: UNNotificationResponse,
-                                withCompletionHandler completionHandler: @escaping () -> Swift.Void) {
-        
-        switch response.actionIdentifier {
-        case ActionIdentifier.attend.rawValue:
-            debugPrint("出席します")
-        case ActionIdentifier.absent.rawValue:
-            debugPrint("欠席します")
-        default:
-            ()
-        }
-        
-        completionHandler()
-    }
-    
     func up() {
         count = count - 1
         let minStr = String(count/60)
@@ -107,7 +90,29 @@ class TimerViewController: UIViewController {
                                             trigger: trigger)
         
         UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
+        
     }
+    @available(iOS 10.0, *)
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                didReceive response: UNNotificationResponse,
+                                withCompletionHandler completionHandler: @escaping () -> Swift.Void) {
+        
+        switch response.actionIdentifier {
+        case "finish":
+            debugPrint("終了します")
+            break
+        case "add_5":
+            debugPrint("5分追加")
+            count = count + 5 * 60
+            up()
+            break
+        default:
+            break
+        }
+        
+        completionHandler()
+    }
+
 
     
 

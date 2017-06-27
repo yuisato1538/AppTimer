@@ -10,11 +10,11 @@ import UIKit
 import UserNotifications
 
 enum ActionIdentifier: String {
-    case attend
-    case absent
+    case finish
+    case add
 }
 
-class TimerViewController: UIViewController {
+class TimerViewController: UIViewController,UNUserNotificationCenterDelegate {
     var count: Int = 10 * 60 // 10min = 600sec
     var timer = Timer()
     
@@ -23,17 +23,26 @@ class TimerViewController: UIViewController {
     
     @IBOutlet var timerLabel: UILabel!
     @IBOutlet var useappLabel : UILabel!
+    var startDate: Date!
+//    var finishDate:TimeInterval!
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        
+//        print(Date())
+        
+//Int型での現在時刻の取得
+//        _ = Int(Date().timeIntervalSince1970) % (24*60*60) / 60
 
+//秒単位のUNIX時間
+//        let startTime = Int(Date().timeIntervalSince1970)
+//        print(startTime)
         
-        
-        
-        print(numstr)
-        
-        
+//現在時刻の取得
+        startDate = Date()
+        print(startDate)
+
         count = Int(numstr)! * 60
         
         count = 10 // デバッグ用
@@ -47,7 +56,6 @@ class TimerViewController: UIViewController {
             
         }
         
-//        up()
         
     }
     
@@ -63,10 +71,10 @@ class TimerViewController: UIViewController {
     }
     
     func TimerFinished() {
-        let finish = UNNotificationAction(identifier:"finish",
+        let finish = UNNotificationAction(identifier:ActionIdentifier.finish.rawValue,
                                           title: "終わる",
                                           options: [])
-        let add = UNNotificationAction(identifier: "add_5",
+        let add = UNNotificationAction(identifier:ActionIdentifier.add.rawValue,
                                        title: "5分追加",
                                        options: [])
         let category = UNNotificationCategory(identifier: "message",
@@ -74,6 +82,8 @@ class TimerViewController: UIViewController {
                                               intentIdentifiers: [],
                                               options: [])
         UNUserNotificationCenter.current().setNotificationCategories([category])
+        UNUserNotificationCenter.current().delegate = self
+        
         
         let content = UNMutableNotificationContent()
         content.title = "タイマー終了"
@@ -92,19 +102,61 @@ class TimerViewController: UIViewController {
         UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
         
     }
+    func AddTime() {
+        let finish = UNNotificationAction(identifier:ActionIdentifier.finish.rawValue,
+                                          title: "終わる",
+                                          options: [])
+        let add = UNNotificationAction(identifier:ActionIdentifier.add.rawValue,
+                                       title: "5分追加",
+                                       options: [])
+        let category = UNNotificationCategory(identifier: "message",
+                                              actions: [finish, add],
+                                              intentIdentifiers: [],
+                                              options: [])
+        UNUserNotificationCenter.current().setNotificationCategories([category])
+        UNUserNotificationCenter.current().delegate = self
+
+        
+        let content = UNMutableNotificationContent()
+        content.title = "タイマー終了"
+        content.body = "アプリの使用を終わりますか？"
+        content.sound = UNNotificationSound.default()
+        
+        // categoryIdentifierを設定
+        content.categoryIdentifier = "message"
+        
+        // 10分後
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
+        let request = UNNotificationRequest(identifier: "Addtimer",
+                                            content: content,
+                                            trigger: trigger)
+        
+        UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
+        
+    }
+
     @available(iOS 10.0, *)
     func userNotificationCenter(_ center: UNUserNotificationCenter,
                                 didReceive response: UNNotificationResponse,
                                 withCompletionHandler completionHandler: @escaping () -> Swift.Void) {
         
         switch response.actionIdentifier {
-        case "finish":
+        case ActionIdentifier.finish.rawValue:
             debugPrint("終了します")
+            let finishDate = Date()
+            print(finishDate)
+            //差で使った時間を出す
+            let usingTime = finishDate.timeIntervalSince(startDate)
+            print(usingTime)
+            
             break
-        case "add_5":
-            debugPrint("5分追加")
-            count = count + 5 * 60
-            up()
+        case ActionIdentifier.add.rawValue:
+            debugPrint("10分追加")
+            AddTime()
+////            count = count + 5 * 60
+////            count = 20
+////            up()
+//            timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.up), userInfo: nil, repeats: true)
             break
         default:
             break
@@ -112,14 +164,16 @@ class TimerViewController: UIViewController {
         
         completionHandler()
     }
-
+    
 
     
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
-    }
+        
+            }
+    
     
     
     

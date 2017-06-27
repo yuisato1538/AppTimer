@@ -197,6 +197,11 @@
 					16FF4A121ECB157200AF72B1 = {
 						CreatedOnToolsVersion = 8.3.2;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 0;
+							};
+						};
 					};
 					16FF4A261ECB157200AF72B1 = {
 						CreatedOnToolsVersion = 8.3.2;

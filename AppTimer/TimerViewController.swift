@@ -65,8 +65,8 @@ class TimerViewController: UIViewController,UNUserNotificationCenterDelegate {
         let secStr = String(count%60)
         timerLabel.text = String(minStr + ":" + secStr)
         if count < 1{
-            TimerFinished()
             timer.invalidate()
+            TimerFinished()
         }
     }
     
@@ -103,36 +103,17 @@ class TimerViewController: UIViewController,UNUserNotificationCenterDelegate {
         
     }
     func AddTime() {
-        let finish = UNNotificationAction(identifier:ActionIdentifier.finish.rawValue,
-                                          title: "終わる",
-                                          options: [])
-        let add = UNNotificationAction(identifier:ActionIdentifier.add.rawValue,
-                                       title: "5分追加",
-                                       options: [])
-        let category = UNNotificationCategory(identifier: "message",
-                                              actions: [finish, add],
-                                              intentIdentifiers: [],
-                                              options: [])
-        UNUserNotificationCenter.current().setNotificationCategories([category])
-        UNUserNotificationCenter.current().delegate = self
-
         
-        let content = UNMutableNotificationContent()
-        content.title = "タイマー終了"
-        content.body = "アプリの使用を終わりますか？"
-        content.sound = UNNotificationSound.default()
+        count = count + 10
+        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.up), userInfo: nil, repeats: true)
+        let minStr = String(count/60)
+        let secStr = String(count%60)
+        timerLabel.text = String(minStr + ":" + secStr)
         
-        // categoryIdentifierを設定
-        content.categoryIdentifier = "message"
-        
-        // 10分後
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
-        let request = UNNotificationRequest(identifier: "Addtimer",
-                                            content: content,
-                                            trigger: trigger)
-        
-        UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
-        
+        if count < 1{
+            timer.invalidate()
+            TimerFinished()
+        }
     }
 
     @available(iOS 10.0, *)

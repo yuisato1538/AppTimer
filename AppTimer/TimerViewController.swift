@@ -147,8 +147,9 @@ class TimerViewController: UIViewController,UNUserNotificationCenterDelegate {
         completionHandler()
     }
     
-
-    
+    @IBAction func backButtonTapped(){
+        dismiss(animated: true, completion: nil)
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

@@ -61,9 +61,10 @@ class TimerViewController: UIViewController,UNUserNotificationCenterDelegate {
     
     func up() {
         count = count - 1
-        let minStr = String(count/60)
-        let secStr = String(count%60)
+        let minStr = String(format: "%02d", count/60)
+        let secStr = String(format: "%02d",count%60)
         timerLabel.text = String(minStr + ":" + secStr)
+        
         if count < 1{
             timer.invalidate()
             TimerFinished()
@@ -87,7 +88,7 @@ class TimerViewController: UIViewController,UNUserNotificationCenterDelegate {
         
         let content = UNMutableNotificationContent()
         content.title = "タイマー終了"
-        content.body = "アプリの使用を終わりますか？"
+        content.body = "タイマーの使用を終わりますか？"
         content.sound = UNNotificationSound.default()
         
         // categoryIdentifierを設定
@@ -132,7 +133,7 @@ class TimerViewController: UIViewController,UNUserNotificationCenterDelegate {
             
             break
         case ActionIdentifier.add.rawValue:
-            debugPrint("10分追加")
+            debugPrint("５分追加")
             AddTime()
 ////            count = count + 5 * 60
 ////            count = 20

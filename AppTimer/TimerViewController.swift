@@ -11,7 +11,8 @@ import UserNotifications
 
 enum ActionIdentifier: String {
     case finish
-    case add
+    case add5
+    case add10
 }
 
 class TimerViewController: UIViewController,UNUserNotificationCenterDelegate {
@@ -19,7 +20,7 @@ class TimerViewController: UIViewController,UNUserNotificationCenterDelegate {
     var timer = Timer()
     
     var numstr: String!
-    var appstr = "Instagram"
+    var appstr: String!
     
     @IBOutlet var timerLabel: UILabel!
     @IBOutlet var useappLabel : UILabel!
@@ -29,6 +30,15 @@ class TimerViewController: UIViewController,UNUserNotificationCenterDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        if appstr == "LINE" {
+            useappLabel.backgroundColor = UIColor(red: 29/255, green: 205/255, blue: 0/255, alpha: 0.7)
+        }else if appstr == "Instagram"{
+            useappLabel.backgroundColor = UIColor(red: 193/255, green: 53/255, blue: 132/255, alpha: 0.7)
+        }else if appstr == "Twitter"{
+            useappLabel.backgroundColor = UIColor(red: 29/255, green: 161/255, blue: 242/255, alpha: 0.7)
+        }else if appstr == "Facebook"{
+            useappLabel.backgroundColor = UIColor(red: 59/255, green: 89/255, blue: 152/255, alpha: 0.7)
+        }
         
 //        print(Date())
         
@@ -44,10 +54,12 @@ class TimerViewController: UIViewController,UNUserNotificationCenterDelegate {
         print(startDate)
 
         count = Int(numstr)! * 60
-        
-        count = 10 // デバッグ用
-        
-        timerLabel.text = numstr + ":00"
+    
+        let hourStr = String(format: "%02d", count/60/60)
+        let minStr = String(format: "%02d", count/60%60)
+        let secStr = String(format: "%02d",count%60)
+        timerLabel.text = String(hourStr + ":" + minStr + ":" + secStr)
+
         useappLabel.text = appstr
 
         // Do any additional setup after loading the view.
@@ -61,9 +73,10 @@ class TimerViewController: UIViewController,UNUserNotificationCenterDelegate {
     
     func up() {
         count = count - 1
-        let minStr = String(format: "%02d", count/60)
+        let hourStr = String(format: "%02d", count/60/60)
+        let minStr = String(format: "%02d", count/60%60)
         let secStr = String(format: "%02d",count%60)
-        timerLabel.text = String(minStr + ":" + secStr)
+        timerLabel.text = String(hourStr + ":" + minStr + ":" + secStr)
         
         if count < 1{
             timer.invalidate()
@@ -75,11 +88,14 @@ class TimerViewController: UIViewController,UNUserNotificationCenterDelegate {
         let finish = UNNotificationAction(identifier:ActionIdentifier.finish.rawValue,
                                           title: "終わる",
                                           options: [])
-        let add = UNNotificationAction(identifier:ActionIdentifier.add.rawValue,
+        let add5 = UNNotificationAction(identifier:ActionIdentifier.add5.rawValue,
                                        title: "5分追加",
                                        options: [])
+        let add10 = UNNotificationAction(identifier: ActionIdentifier.add10.rawValue,
+                                         title: "10分追加",
+                                         options: [])
         let category = UNNotificationCategory(identifier: "message",
-                                              actions: [finish, add],
+                                              actions: [finish, add5,add10],
                                               intentIdentifiers: [],
                                               options: [])
         UNUserNotificationCenter.current().setNotificationCategories([category])
@@ -103,7 +119,20 @@ class TimerViewController: UIViewController,UNUserNotificationCenterDelegate {
         UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
         
     }
-    func AddTime() {
+    func AddTime5() {
+        
+        count = count + 10
+        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.up), userInfo: nil, repeats: true)
+        let minStr = String(count/60)
+        let secStr = String(count%60)
+        timerLabel.text = String(minStr + ":" + secStr)
+        
+        if count < 1{
+            timer.invalidate()
+            TimerFinished()
+        }
+    }
+    func AddTime10() {
         
         count = count + 10
         timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.up), userInfo: nil, repeats: true)
@@ -132,9 +161,12 @@ class TimerViewController: UIViewController,UNUserNotificationCenterDelegate {
             print(usingTime)
             
             break
-        case ActionIdentifier.add.rawValue:
-            debugPrint("５分追加")
-            AddTime()
+        case ActionIdentifier.add5.rawValue:
+            debugPrint("5分追加")
+            AddTime5()
+        case ActionIdentifier.add10.rawValue:
+            debugPrint("10分追加")
+            AddTime10()
 ////            count = count + 5 * 60
 ////            count = 20
 ////            up()

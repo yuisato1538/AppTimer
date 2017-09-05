@@ -17,8 +17,8 @@ class ViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDataSour
     var selected = "1"
     var selectedApp = "Instagram"
     
-    let dataSelect = ["1","5","10","15","20","25","30"]
-    let appSelect = ["Instagram","Twitter"]
+    let dataSelect = ["1","5","10","15","20","25","30","35","40","45","50","55","60","70","80","90","100","110","120"]
+    let appSelect = ["Instagram","Twitter","LINE","Facebook"]
     
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -54,7 +54,7 @@ class TimerViewController: UIViewController,UNUserNotificationCenterDelegate {
         print(startDate)
 
         count = Int(numstr)! * 60
-//        count = 7
+        count = 20
     
         let hourStr = String(format: "%02d", count/60/60)
         let minStr = String(format: "%02d", count/60%60)
@@ -72,7 +72,7 @@ class TimerViewController: UIViewController,UNUserNotificationCenterDelegate {
         
     }
     
-    func up() {
+    @objc func up() {
         count = count - 1
         let hourStr = String(format: "%02d", count/60/60)
         let minStr = String(format: "%02d", count/60%60)
